@@ -1,23 +1,20 @@
 var path = require('path')
 var webpack = require('webpack')
 
-const NODE_ENV = process.env.NODE_ENV
-
 module.exports = {
-  // entry: './src/main.js',
-  entry: NODE_ENV == 'development' ? './src/main.js' : './index.js',
+  entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'lk-timeline.js',
-    library: 'lk-timeline',
-    libraryTarget: 'umd'
+    filename: 'build.js',
+    library: 'lk-timeline', // 使用 require 时的模块名
+    libraryTarget: 'umd' // 输出格式
   },
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.css$/,
         use: [
-          'style-loader',
           'vue-style-loader',
           'css-loader'
         ],

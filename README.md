@@ -6,16 +6,15 @@
 
 [github 地址](https://github.com/liuzhenghe30265/lk-timeline)
 
-
 # Demo
 
 [lk-timeline](http://blog.liuzhenghe.com/lk-timeline/)
 
-
 # Install
 
 From npm:
-```
+
+``` 
 npm install lk-timeline --save
 ```
 
@@ -24,13 +23,15 @@ npm install lk-timeline --save
 ## 全局使用
 
 main.js
-```
+
+``` 
 import LkTimeline from 'lk-timeline'
 Vue.use(LkTimeline)
 ```
 
 .vue
-```
+
+``` 
 <template>
   <div>
     <lk-timeline
@@ -76,10 +77,9 @@ export default {
 </script>
 ```
 
-
 ## 组件内使用
 
-```
+``` 
 <template>
   <div>
     <lk-timeline

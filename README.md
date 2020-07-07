@@ -8,7 +8,7 @@
 
 # Demo
 
-[lk-timeline](http://blog.liuzhenghe.com/lk-timeline/)
+[lk-timeline](https://liuzhenghe30265.github.io/lk-timeline)
 
 # Install
 

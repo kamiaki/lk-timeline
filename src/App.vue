@@ -20,7 +20,7 @@ export default {
     return {
       date: '',
       options: {
-        speed: 1, // 速度
+        speed: 5, // 速度
         speedMax: 10 // 速度最大值
       },
       interval: 200, // 日期间的间隔
@@ -42,7 +42,7 @@ export default {
     Main
   },
   mounted() {
-    // 获取最近10天的日期
+    // 获取最近 10 天的日期
     let list = []
     for (let i = 0; i < 10; i++) {
       list.unshift(
@@ -65,6 +65,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-</style>

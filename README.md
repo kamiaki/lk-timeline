@@ -1,24 +1,22 @@
-# lk-timeline
+# lk-timeline 王小秋改造自用版本
 
-> 基于 Vue 开发的带播放功能的时间轴插件
 
-![](https://tva1.sinaimg.cn/large/00831rSTly1gd06qlr8rgg31ao06sdqr.gif)
 
-[github 地址](https://github.com/liuzhenghe30265/lk-timeline)
+主要解决了 npm安装之后，直接全屏了的问题，其实就是打包的时候，没用index.js造成的
 
-# Demo
 
-[lk-timeline](https://liuzhenghe30265.github.io/lk-timeline)
 
 # Install
 
 From npm:
 
 ``` 
-npm install lk-timeline --save
+npm install aki_vue_timeline --save
 ```
 
-# Usage
+
+
+
 
 ## 全局使用
 

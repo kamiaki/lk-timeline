@@ -126,3 +126,12 @@ export default {
 }
 </script>
 ```
+
+
+
+更新内容 2020 11 12
+
+```
+@getDate="getDate" //选择日期后回调函数，参数是选择的日期
+:dateSelection="dates"	//设置可选择的日期
+```

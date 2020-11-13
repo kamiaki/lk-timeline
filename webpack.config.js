@@ -62,7 +62,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        //exclude: /node_modules/
       },
       // 这里很关键 不然图片无法显示 将图片转换为base64码 超过10M的图片需要再设置大一点
       {

@@ -1,7 +1,7 @@
 {
   "name": "aki_vue_timeline",
   "description": "这是一个时间线组件,由 liuzhenghe30265/lk-timeline 改装而来，增加日期",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "aki",
   "license": "MIT",
   "private": false,
@@ -11,6 +11,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "aki_js_utils": "^1.0.3",
     "vue": "^2.5.11"
   },
   "browserslist": [

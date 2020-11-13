@@ -190,10 +190,12 @@
       },
       // 获取步长
       getStep() {
+        this.activeIndex = 0 //指针归零
         this.setDateTimes() // 设置格子
         this.$emit('getStep', this.step);
         // 获取选择的日期
       }, getDate() {
+        this.activeIndex = 0 //指针归零
         this.$emit('getDate', this.selectDay);
       },
       // 设置格子

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import {dateFormat} from './utils/utis'
+  import {dateFormat} from 'aki_js_utils'
   import Main from './components/Main'
 
   export default {

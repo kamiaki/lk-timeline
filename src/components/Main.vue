@@ -33,6 +33,16 @@
            :class="{'menu_icon_disabled':playing}"
            @click="speedQuick"></i>
       </div>
+      <!--间隔选择-->
+      <div style="float: left;margin-left: 10px">
+        <span>间隔</span>
+        <select @change="getStep" v-model="step" style="height: 30px" :disabled="dateSelect">
+          <option value="10min">10min</option>
+          <option value="30min">30min</option>
+          <option value="1h">1h</option>
+          <option value="3h">3h</option>
+        </select>
+      </div>
       <!--日期选择-->
       <div style="float: left;margin-left: 10px">
         <span>日期</span>
@@ -76,16 +86,24 @@
         playing: false, // 播放
         activeIndex: 0, // 当前的时间位置
         hoverIndex: 0, // 鼠标移入的时间位置
-        selectDay: '',
-        dateSelect: false
+        dateSelect: false,  // 播放时,不可选择间隔和日期
+        selectDay: '',  // 选择的日期
+        step: ''  // 选择的间隔步长
       }
     },
     props: {
-      dateSelection: { //可选择的天
+      stepTypes: { // 可选择的间隔
+        type: Array,
+        default() {
+          return ['10min','30min','1h','3h']
+        }
+      },
+      dateSelection: { // 可选择的天
         type: Array,
         default() {
           return [
-            {dateStr: '2020-11-12', event: '雷电'},
+            {dateStr: '2020-11-13', event: '雷电'},
+            {dateStr: '2020-11-12', event: ''},
             {dateStr: '2020-11-11', event: '雷电'},
             {dateStr: '2020-11-10', event: ''}
           ]
@@ -149,6 +167,10 @@
       }
     },
     mounted() {
+      this.selectDay = this.dateSelection[0].dateStr // 默认天数
+      this.step = this.stepTypes[0] // 默认步长
+
+      // 原有的内容
       this.renderTimeline()
       let that = this
       window.onresize = function () {
@@ -162,7 +184,9 @@
       }
     },
     methods: {
-      getDate() {
+      getStep() {
+        this.$emit('getStep', this.step);
+      },getDate() {
         this.$emit('getDate', this.selectDay);
       },
       // 初始化时间轴

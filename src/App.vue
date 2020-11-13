@@ -1,20 +1,21 @@
 <template>
   <div>
+    <div style="cursor: pointer" @click="getmsg">点我知信息</div>
     <h2
       style="margin:0;text-align:center;">
       {{this.date}}
     </h2>
-    <Main :options="options"
-          :dateTimes="dateTimes"
-          @getDateFun="getDateFun"
-          :interval="interval"
+    <Main @getDateFun="getDateFun"
           @getDate="getDate"
-          :dateSelection="dates"></Main>
+          @getStep="getStep"
+          :dateSelection="dates"
+          :stepTypes="stepTypes"
+          ref="timeLine"></Main>
   </div>
 </template>
 
 <script>
-  import {dateFormat} from './util/formatdate.js'
+  import {dateFormat} from 'aki_js_utils'
   import Main from './components/Main'
 
   export default {
@@ -22,11 +23,6 @@
     data() {
       return {
         date: '',
-        options: {
-          speed: 1, // 速度
-          speedMax: 10 // 速度最大值
-        },
-        interval: 200, // 日期间的间隔
         dates: [
           {dateStr: '2020-11-17', event: '雷电'},
           {dateStr: '2020-11-16', event: '雷电'},
@@ -37,18 +33,7 @@
           {dateStr: '2020-11-11', event: '雷电'},
           {dateStr: '2020-11-10', event: ''}
         ],
-        dateTimes: [
-          '01',
-          '02',
-          '03',
-          '04',
-          '05',
-          '06',
-          '07',
-          '08',
-          '09',
-          '10'
-        ]
+        stepTypes: ['10', '30', '60', '180']
       }
     },
     components: {
@@ -69,9 +54,15 @@
       }
       // this.date = list[0]
       // this.dateTimes = list
-      this.date = this.dateTimes[0]
+      this.date = 'asdsadsa'
     },
     methods: {
+      getmsg(){
+        console.info(this.$refs.timeLine.getTimeLineInfo());
+      },
+      getStep(step) {
+        console.info(step)
+      },
       getDate(day) {
         console.info(day)
       },

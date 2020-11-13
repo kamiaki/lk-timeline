@@ -37,10 +37,9 @@
       <div style="float: left;margin-left: 10px">
         <span>间隔</span>
         <select @change="getStep" v-model="step" style="height: 30px" :disabled="dateSelect">
-          <option value="10min">10min</option>
-          <option value="30min">30min</option>
-          <option value="1h">1h</option>
-          <option value="3h">3h</option>
+          <option :value="stepType" v-for="(stepType, index) in stepTypes" :key="index">
+            {{stepType+'min'}}
+          </option>
         </select>
       </div>
       <!--日期选择-->
@@ -76,7 +75,7 @@
   </div>
 </template>
 <script>
-  import {dateFormat} from '../util/formatdate.js' // 日期格式化
+  import {dateFormat, minToHour} from 'aki_js_utils' // 日期格式化
   export default {
     name: 'lk-timeline',
     data() {
@@ -88,23 +87,22 @@
         hoverIndex: 0, // 鼠标移入的时间位置
         dateSelect: false,  // 播放时,不可选择间隔和日期
         selectDay: '',  // 选择的日期
-        step: ''  // 选择的间隔步长
+        step: 0,  // 选择的间隔步长
+        dateTimes: [] // 显示多少个格子
       }
     },
     props: {
       stepTypes: { // 可选择的间隔
         type: Array,
         default() {
-          return ['10min','30min','1h','3h']
+          return ['10', '60']
         }
       },
       dateSelection: { // 可选择的天
         type: Array,
         default() {
           return [
-            {dateStr: '2020-11-13', event: '雷电'},
-            {dateStr: '2020-11-12', event: ''},
-            {dateStr: '2020-11-11', event: '雷电'},
+            {dateStr: '2020-11-11', event: '备注'},
             {dateStr: '2020-11-10', event: ''}
           ]
         }
@@ -112,13 +110,10 @@
       options: {
         type: Object,
         default() {
-          return {}
-        }
-      },
-      dateTimes: {
-        type: Array,
-        default() {
-          return []
+          return {
+            speed: 1, // 速度
+            speedMax: 10 // 速度最大值
+          }
         }
       },
       interval: {
@@ -161,14 +156,15 @@
       },
       // 只要播放，数据发生改变，就调用
       activeIndex() {
-        const time = this.dateTimes[this.activeIndex].split(' ')[0]
+        const time = this.dateTimes[this.activeIndex]
         const selectDay = this.selectDay
-        this.$emit('getDateFun', {selectDay,time})
+        this.$emit('getDateFun', {selectDay, time})
       }
     },
     mounted() {
       this.selectDay = this.dateSelection[0].dateStr // 默认天数
       this.step = this.stepTypes[0] // 默认步长
+      this.setDateTimes() // 设置格子
 
       // 原有的内容
       this.renderTimeline()
@@ -184,11 +180,30 @@
       }
     },
     methods: {
+      getTimeLineInfo() {
+        let msgObj = {
+          selectDay: this.selectDay,
+          step: this.step,
+          dateTimes: this.dateTimes
+        }
+        return msgObj
+      },
+      // 获取步长
       getStep() {
+        this.setDateTimes() // 设置格子
         this.$emit('getStep', this.step);
-      },getDate() {
+        // 获取选择的日期
+      }, getDate() {
         this.$emit('getDate', this.selectDay);
       },
+      // 设置格子
+      setDateTimes() {
+        this.dateTimes.length = 0
+        for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
+          this.dateTimes.push(minToHour(i))
+        }
+      },
+      //////////////////////////// 之前的方法
       // 初始化时间轴
       renderTimeline() {
         // 时间轴的宽度
@@ -311,6 +326,7 @@
           float: left;
 
           &.speed {
+            width: 20px;
             padding: 0 5px;
           }
         }

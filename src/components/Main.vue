@@ -75,7 +75,7 @@
   </div>
 </template>
 <script>
-  import {dateFormat, minToHour} from 'aki_js_utils' // 日期格式化
+  import {dateFormat, minToHour} from '../utils/utis' // 日期格式化
   export default {
     name: 'lk-timeline',
     data() {

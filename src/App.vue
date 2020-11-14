@@ -5,9 +5,9 @@
       style="margin:0;text-align:center;">
       {{this.date}}
     </h2>
-    <Main @getDateFun="getDateFun"
-          @getDate="getDate"
-          @getStep="getStep"
+    <Main @watchDateFun="watchDateFun"
+          @watchDate="watchDate"
+          @watchStep="watchStep"
           :dateSelection="dates"
           :stepTypes="stepTypes"
           ref="timeLine"></Main>
@@ -60,13 +60,13 @@
       getmsg(){
         console.info(this.$refs.timeLine.getTimeLineInfo());
       },
-      getStep(step) {
+      watchStep(step) {
         console.info(step)
       },
-      getDate(day) {
+      watchDate(day) {
         console.info(day)
       },
-      getDateFun(time) {
+      watchDateFun(time) {
         console.log(time)
         this.date = time.time
       }

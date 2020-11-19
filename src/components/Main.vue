@@ -28,7 +28,7 @@
            :class="{'menu_icon_disabled':playing}"
            @click="speedSlow"></i>
         <i
-          class="speed">{{ options.speed }}</i>
+          class="speed">{{ options.speed.toFixed(1) }}</i>
         <i class="menu_icon icon_down"
            :class="{'menu_icon_disabled':playing}"
            @click="speedQuick"></i>
@@ -52,25 +52,28 @@
         </select>
       </div>
     </div>
-    <div class="timeline_axis">
-      <div class="axis_item"
-           v-for="(time, index) in dateTimes"
-           :key="index">
-        <div class="axis_item_tick"
-             :class="{ 'axis_item_tick_active':index === highlightIndex }"
-             @mouseenter="hoverIndex = index"
-             @mouseleave="hoverIndex = -1"
-             @click="tickClick(time, index)">
-        </div>
-        <div class="axis_item_label"
-             v-if="dateTimeIndexes.indexOf(index) >=0 ">
-          {{ time }}
-        </div>
-        <div class="axis_item_tip"
-             v-if="index === highlightIndex || index === hoverIndex">
-          {{ time}}
+    <div class="wai">
+      <div class="timeline_axis">
+        <div class="axis_item"
+             v-for="(time, index) in dateTimes"
+             :key="index">
+          <div class="axis_item_tick"
+               :class="{ 'axis_item_tick_active':index === highlightIndex }"
+               @mouseenter="hoverIndex = index"
+               @mouseleave="hoverIndex = -1"
+               @click="tickClick(time, index)">
+          </div>
+          <div class="axis_item_label"
+               v-if="dateTimeIndexes.indexOf(index) >=0 ">
+            {{ time }}
+          </div>
+          <div class="axis_item_tip"
+               v-if="index === highlightIndex || index === hoverIndex">
+            {{ time}}
+          </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -156,7 +159,11 @@
       },
       // 只要播放，数据发生改变，就调用
       activeIndex() {
-        this.$emit('watchDateFun', {dateTimes: this.dateTimes[this.activeIndex], selectDay: this.selectDay, step: this.step})
+        this.$emit('watchDateFun', {
+          dateTimes: this.dateTimes[this.activeIndex],
+          selectDay: this.selectDay,
+          step: this.step
+        })
       }
     },
     mounted() {
@@ -190,11 +197,19 @@
       watchStep() {
         this.activeIndex = 0 //指针归零
         this.setDateTimes() // 设置格子
-        this.$emit('watchStep', {dateTimes: this.dateTimes[this.activeIndex], selectDay: this.selectDay, step: this.step});
+        this.$emit('watchStep', {
+          dateTimes: this.dateTimes[this.activeIndex],
+          selectDay: this.selectDay,
+          step: this.step
+        });
         // 获取选择的日期
       }, watchDate() {
         this.activeIndex = 0 //指针归零
-        this.$emit('watchDate', {dateTimes: this.dateTimes[this.activeIndex], selectDay: this.selectDay, step: this.step});
+        this.$emit('watchDate', {
+          dateTimes: this.dateTimes[this.activeIndex],
+          selectDay: this.selectDay,
+          step: this.step
+        });
       },
       // 设置格子
       setDateTimes() {
@@ -290,9 +305,8 @@
     box-sizing: border-box;
 
     .timeline_control {
+      padding-left: 20px;
       overflow: hidden;
-      margin-bottom: 30px;
-
       i {
         cursor: pointer;
         display: inline-block;
@@ -301,9 +315,9 @@
 
       .menu_icon {
         font-size: 20px;
-        width: 20px;
-        height: 20px;
-        background-size: cover;
+        width: 30px;
+        height: 30px;
+        background-size: 100% 100%;
         background-repeat: no-repeat;
       }
 
@@ -336,64 +350,77 @@
         }
       }
     }
+    .wai{
+      width: 100%;
 
-    .timeline_axis {
-      position: relative;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
+      .timeline_axis {
+        margin: 0 auto;
+        width: 98%;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        background-color: rgba(42, 215, 239, 0.2);
+        border-radius: 10px;
+        height: 40px;
 
-      &::before {
-        content: '';
-        width: 100%;
-        height: 10px;
-        position: absolute;
-        left: 0;
-        bottom: 8px;
-        display: inline-block;
-        background: rgba(0, 0, 0, 0.5);
-      }
-    }
-
-    .axis_item {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .axis_item_tick {
-        display: inline-block;
-        width: 4px;
-        height: 20px;
-        background: rgba(0, 0, 0, 0.5);
-        transition: background 0.3s;
-        cursor: pointer;
-
-        &:hover {
-          background: #00fffa;
+        &::before {
+          content: '';
+          width: 100%;
+          height: 20px;
+          position: absolute;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          bottom: 10px;
+          display: inline-block;
+          background-color: rgba(21, 48, 143, 0.2);
         }
       }
 
-      .axis_item_tick_active {
-        background: #00fffa;
-      }
+      .axis_item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
-      .axis_item_label {
-        position: absolute;
-        bottom: -30px;
-        white-space: nowrap;
-      }
+        .axis_item_tick {
+          border-radius: 5px;
+          display: inline-block;
+          width: 5px;
+          height: 15px;
+          transition: background 0.3s;
+          cursor: pointer;
+          background-color: #1f0049;
 
-      .axis_item_tip {
-        position: absolute;
-        top: -25px;
-        padding: 2px 6px;
-        border-radius: 2px;
-        background: rgba(0, 0, 0, 0.5);
-        white-space: nowrap;
-        color: #fff;
+          &:hover {
+            background-color: #c3cbff;
+          }
+        }
+
+        .axis_item_tick_active {
+          background-color: #c3cbff;
+        }
+
+        .axis_item_label {
+          display: none;
+          position: absolute;
+          bottom: -30px;
+          white-space: nowrap;
+        }
+
+        .axis_item_tip {
+          position: absolute;
+          bottom: -20px;
+          padding: 2px 6px;
+          border-radius: 10px;
+          background-color: rgba(21, 48, 143, 0.5);
+          white-space: nowrap;
+          color: #fff;
+        }
       }
     }
+
   }
 
   .icon_left {

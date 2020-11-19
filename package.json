@@ -1,7 +1,7 @@
 {
   "name": "aki_vue_timeline",
   "description": "这是一个时间线组件,由 liuzhenghe30265/lk-timeline 反馈全部信息",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "author": "aki",
   "license": "MIT",
   "private": false,

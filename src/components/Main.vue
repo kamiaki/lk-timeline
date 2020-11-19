@@ -156,9 +156,7 @@
       },
       // 只要播放，数据发生改变，就调用
       activeIndex() {
-        const time = this.dateTimes[this.activeIndex]
-        const selectDay = this.selectDay
-        this.$emit('watchDateFun', {selectDay, time})
+        this.$emit('watchDateFun', {dateTimes: this.dateTimes[this.activeIndex], selectDay: this.selectDay, step: this.step})
       }
     },
     mounted() {
@@ -192,11 +190,11 @@
       watchStep() {
         this.activeIndex = 0 //指针归零
         this.setDateTimes() // 设置格子
-        this.$emit('watchStep', this.step);
+        this.$emit('watchStep', {dateTimes: this.dateTimes[this.activeIndex], selectDay: this.selectDay, step: this.step});
         // 获取选择的日期
       }, watchDate() {
         this.activeIndex = 0 //指针归零
-        this.$emit('watchDate', this.selectDay);
+        this.$emit('watchDate', {dateTimes: this.dateTimes[this.activeIndex], selectDay: this.selectDay, step: this.step});
       },
       // 设置格子
       setDateTimes() {

@@ -233,20 +233,33 @@
         this.dateTimes.length = 0
         // 判断是不是预警
         if (this.isWarning && this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')) {
-          // 获取当前时间
-          let minute = hourToMin(dateFormat(new Date(), 'hh:mm'))
-          // 将当前时间减少 3 小时
+          // 获取当前时间 ，整到小时
+          let minute = hourToMin(dateFormat(new Date(), 'hh') + ':00')
+          // 将当前时间减少，warningHourRange 小时
           let minMinute = minute - this.warningHourRange * 60
           let maxMinute = minute + this.warningHourRange * 60
-          // 根据减3小时的这个时间 去叠加 step 一共叠加到 3 * 2 小时
+          // 根据减 warningHourRange 小时的这个时间，去叠加 step，一共叠加到 warningHourRange * 2 小时
           for (let i = minMinute; i < maxMinute; i += Number(this.step)) {
-            this.dateTimes.push(minToHour(i))
+            let str
+            let ii
+            if (i < 0) {
+              ii = i + 1440
+              str = '-' + minToHour(ii)
+            } else if (i > 1440) {
+              ii = i - 1440
+              str = '+' + minToHour(ii)
+            } else {
+              ii = i
+              str = minToHour(ii)
+            }
+            this.dateTimes.push(str)
           }
           this.redIndex = this.dateTimes.length / 2
-          console.info('是需要预警')
         } else {
           for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
-            this.dateTimes.push(minToHour(i))
+            let str
+            str = minToHour(i)
+            this.dateTimes.push(str)
           }
           this.redIndex = -1
         }
@@ -333,10 +346,11 @@
   }
 </script>
 <style scoped lang="scss">
-  .set_notRed{
+  .set_notRed {
     background-color: #1f0049;
   }
-  .set_red{
+
+  .set_red {
     background-color: #ff0000;
   }
 

@@ -8,8 +8,9 @@
     <Main @watchDateFun="watchDateFun"
           @watchDate="watchDate"
           @watchStep="watchStep"
-          :dateSelection="dates"
           :stepTypes="stepTypes"
+          :dateSelection="dates"
+          :isWarning="true"
           ref="timeLine"></Main>
   </div>
 </template>
@@ -22,16 +23,11 @@
     name: 'app',
     data() {
       return {
-        date: '',
+        date: undefined,
         dates: [
-          {dateStr: '2020-11-17', event: '雷电'},
-          {dateStr: '2020-11-16', event: '雷电'},
-          {dateStr: '2020-11-15', event: '雷电'},
-          {dateStr: '2020-11-14', event: '雷电'},
-          {dateStr: '2020-11-13', event: '雷电'},
-          {dateStr: '2020-11-12', event: '雷电'},
-          {dateStr: '2020-11-11', event: '雷电'},
-          {dateStr: '2020-11-10', event: ''}
+          {dateStr: '2020-11-22', event: '雷电'},
+          {dateStr: '2020-11-23', event: '雷电'},
+          {dateStr: '2020-11-24', event: ''}
         ],
         stepTypes: ['10', '30', '60', '180']
       }
@@ -68,7 +64,7 @@
       },
       watchDateFun(time) {
         console.log(time)
-        this.date = time.time
+        this.date = time.dateTimes
       }
     }
   }

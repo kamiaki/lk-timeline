@@ -95,6 +95,12 @@
       }
     },
     props: {
+      isWarning: {
+        type: Boolean,
+        default() {
+          return false
+        }
+      },
       stepTypes: { // 可选择的间隔
         type: Array,
         default() {
@@ -185,6 +191,7 @@
       }
     },
     methods: {
+      // 主动获取时间轴数据
       getTimeLineInfo() {
         let msgObj = {
           selectDay: this.selectDay,
@@ -205,6 +212,7 @@
         // 获取选择的日期
       }, watchDate() {
         this.activeIndex = 0 //指针归零
+        this.setDateTimes() // 设置格子
         this.$emit('watchDate', {
           dateTimes: this.dateTimes[this.activeIndex],
           selectDay: this.selectDay,
@@ -213,6 +221,13 @@
       },
       // 设置格子
       setDateTimes() {
+        // 判断是不是预警
+        console.info(this.isWarning)
+        console.info(this.selectDay)
+        console.info(dateFormat(new Date(), 'yyyy-MM-dd'))
+        if (this.isWarning && this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')) {
+          console.info('是需要预警')
+        }
         this.dateTimes.length = 0
         for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
           this.dateTimes.push(minToHour(i))
@@ -307,6 +322,7 @@
     .timeline_control {
       padding-left: 20px;
       overflow: hidden;
+
       i {
         cursor: pointer;
         display: inline-block;
@@ -350,7 +366,8 @@
         }
       }
     }
-    .wai{
+
+    .wai {
       width: 100%;
 
       .timeline_axis {

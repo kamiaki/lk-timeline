@@ -58,7 +58,9 @@
              v-for="(time, index) in dateTimes"
              :key="index">
           <div class="axis_item_tick"
-               :class="{ 'axis_item_tick_active':index === highlightIndex }"
+               :class="{ 'axis_item_tick_active':index === highlightIndex ,
+                'set_red': index === redIndex,
+                'set_notRed': index !== redIndex}"
                @mouseenter="hoverIndex = index"
                @mouseleave="hoverIndex = -1"
                @click="tickClick(time, index)">
@@ -78,7 +80,7 @@
   </div>
 </template>
 <script>
-  import {dateFormat, minToHour} from 'aki_js_utils' // 日期格式化
+  import {dateFormat, minToHour, hourToMin} from 'aki_js_utils' // 日期格式化
   export default {
     name: 'lk-timeline',
     data() {
@@ -91,10 +93,17 @@
         dateSelect: false,  // 播放时,不可选择间隔和日期
         selectDay: '',  // 选择的日期
         step: 0,  // 选择的间隔步长
-        dateTimes: [] // 显示多少个格子
+        dateTimes: [], // 显示多少个格子
+        redIndex: 5
       }
     },
     props: {
+      warningHourRange: {
+        type: Number,
+        default() {
+          return 5
+        }
+      },
       isWarning: {
         type: Boolean,
         default() {
@@ -221,16 +230,25 @@
       },
       // 设置格子
       setDateTimes() {
-        // 判断是不是预警
-        console.info(this.isWarning)
-        console.info(this.selectDay)
-        console.info(dateFormat(new Date(), 'yyyy-MM-dd'))
-        if (this.isWarning && this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')) {
-          console.info('是需要预警')
-        }
         this.dateTimes.length = 0
-        for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
-          this.dateTimes.push(minToHour(i))
+        // 判断是不是预警
+        if (this.isWarning && this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')) {
+          // 获取当前时间
+          let minute = hourToMin(dateFormat(new Date(), 'hh:mm'))
+          // 将当前时间减少 3 小时
+          let minMinute = minute - this.warningHourRange * 60
+          let maxMinute = minute + this.warningHourRange * 60
+          // 根据减3小时的这个时间 去叠加 step 一共叠加到 3 * 2 小时
+          for (let i = minMinute; i < maxMinute; i += Number(this.step)) {
+            this.dateTimes.push(minToHour(i))
+          }
+          this.redIndex = this.dateTimes.length / 2
+          console.info('是需要预警')
+        } else {
+          for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
+            this.dateTimes.push(minToHour(i))
+          }
+          this.redIndex = -1
         }
       },
       //////////////////////////// 之前的方法
@@ -315,6 +333,13 @@
   }
 </script>
 <style scoped lang="scss">
+  .set_notRed{
+    background-color: #1f0049;
+  }
+  .set_red{
+    background-color: #ff0000;
+  }
+
   .timeline_main {
     padding: 10px;
     box-sizing: border-box;
@@ -408,7 +433,6 @@
           height: 15px;
           transition: background 0.3s;
           cursor: pointer;
-          background-color: #1f0049;
 
           &:hover {
             background-color: #c3cbff;

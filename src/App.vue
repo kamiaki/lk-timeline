@@ -11,6 +11,7 @@
           :stepTypes="stepTypes"
           :dateSelection="dates"
           :isWarning="true"
+          :warningHourRange="3"
           ref="timeLine"></Main>
   </div>
 </template>

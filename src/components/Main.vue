@@ -36,7 +36,7 @@
       <!--间隔选择-->
       <div style="float: left;margin-left: 10px">
         <span>间隔</span>
-        <select @change="watchStep" v-model="step" style="height: 30px" :disabled="dateSelect">
+        <select @change="watchChange" v-model="step" style="height: 30px" :disabled="dateSelect">
           <option :value="stepType" v-for="(stepType, index) in stepTypes" :key="index">
             {{stepType+'min'}}
           </option>
@@ -45,7 +45,7 @@
       <!--日期选择-->
       <div style="float: left;margin-left: 10px">
         <span>日期</span>
-        <select @change="watchDate" v-model="selectDay" style="height: 30px" :disabled="dateSelect">
+        <select @change="watchChange" v-model="selectDay" style="height: 30px" :disabled="dateSelect">
           <option :value="obj.dateStr" v-for="(obj, index) in dateSelection" :key="index">{{obj.dateStr + ' ' +
             obj.event}}
           </option>
@@ -194,6 +194,19 @@
       window.onresize = function () {
         that.renderTimeline()
       }
+
+      // 初始化传送相关参数
+      let selectDayDateTimes = []
+      for (let i = 0; i < this.dateTimes.length; i++) {
+        selectDayDateTimes.push(this.selectDay + mark + this.dateTimes[i])
+      }
+      this.$emit('getInitParams', {
+        dateTime: this.dateTimes[this.activeIndex],
+        selectDay: this.selectDay,
+        step: this.step,
+        selectDayDateTime: this.selectDay + mark + this.dateTimes[this.activeIndex],
+        selectDayDateTimes
+      });
     },
     filters: {
       formatDatetime(dateTime) {
@@ -205,36 +218,22 @@
       // 主动获取时间轴数据
       getTimeLineInfo() {
         let msgObj = {
+          dateTime: this.dateTimes[this.activeIndex],
           selectDay: this.selectDay,
           step: this.step,
-          dateTimes: this.dateTimes
+          selectDayDateTime: this.selectDay + mark + this.dateTimes[this.activeIndex]
         }
         return msgObj
       },
       // 获取步长
-      watchStep() {
+      watchChange() {
         this.activeIndex = 0 //指针归零
         this.setDateTimes() // 设置格子
         let selectDayDateTimes = []
         for (let i = 0; i < this.dateTimes.length; i++) {
           selectDayDateTimes.push(this.selectDay + mark + this.dateTimes[i])
         }
-        this.$emit('watchStep', {
-          dateTime: this.dateTimes[this.activeIndex],
-          selectDay: this.selectDay,
-          step: this.step,
-          selectDayDateTime: this.selectDay + mark + this.dateTimes[this.activeIndex],
-          selectDayDateTimes
-        });
-        // 获取选择的日期
-      }, watchDate() {
-        this.activeIndex = 0 //指针归零
-        this.setDateTimes() // 设置格子
-        let selectDayDateTimes = []
-        for (let i = 0; i < this.dateTimes.length; i++) {
-          selectDayDateTimes.push(this.selectDay + mark + this.dateTimes[i])
-        }
-        this.$emit('watchDate', {
+        this.$emit('watchChange', {
           dateTime: this.dateTimes[this.activeIndex],
           selectDay: this.selectDay,
           step: this.step,

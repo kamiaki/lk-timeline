@@ -5,9 +5,9 @@
       style="margin:0;text-align:center;">
       {{this.date}}
     </h2>
-    <Main @watchDateFun="watchDateFun"
-          @watchDate="watchDate"
-          @watchStep="watchStep"
+    <Main @getInitParams="getInitParams"
+          @watchDateFun="watchDateFun"
+          @watchChange="watchChange"
           :stepTypes="stepTypes"
           :dateSelection="dates"
           :isWarning="true"
@@ -57,10 +57,10 @@
       getmsg(){
         console.info(this.$refs.timeLine.getTimeLineInfo());
       },
-      watchStep(step) {
+      getInitParams(step) {
         console.info(step)
       },
-      watchDate(day) {
+      watchChange(day) {
         console.info(day)
       },
       watchDateFun(time) {

@@ -81,6 +81,7 @@
 </template>
 <script>
   import {dateFormat, minToHour, hourToMin} from 'aki_js_utils' // 日期格式化
+  const mark = 'T'
   export default {
     name: 'lk-timeline',
     data() {
@@ -175,9 +176,10 @@
       // 只要播放，数据发生改变，就调用
       activeIndex() {
         this.$emit('watchDateFun', {
-          dateTimes: this.dateTimes[this.activeIndex],
+          dateTime: this.dateTimes[this.activeIndex],
           selectDay: this.selectDay,
-          step: this.step
+          step: this.step,
+          selectDayDateTime: this.selectDay + mark + this.dateTimes[this.activeIndex]
         })
       }
     },
@@ -213,19 +215,31 @@
       watchStep() {
         this.activeIndex = 0 //指针归零
         this.setDateTimes() // 设置格子
+        let selectDayDateTimes = []
+        for (let i = 0; i < this.dateTimes.length; i++) {
+          selectDayDateTimes.push(this.selectDay + mark + this.dateTimes[i])
+        }
         this.$emit('watchStep', {
-          dateTimes: this.dateTimes[this.activeIndex],
+          dateTime: this.dateTimes[this.activeIndex],
           selectDay: this.selectDay,
-          step: this.step
+          step: this.step,
+          selectDayDateTime: this.selectDay + mark + this.dateTimes[this.activeIndex],
+          selectDayDateTimes
         });
         // 获取选择的日期
       }, watchDate() {
         this.activeIndex = 0 //指针归零
         this.setDateTimes() // 设置格子
+        let selectDayDateTimes = []
+        for (let i = 0; i < this.dateTimes.length; i++) {
+          selectDayDateTimes.push(this.selectDay + mark + this.dateTimes[i])
+        }
         this.$emit('watchDate', {
-          dateTimes: this.dateTimes[this.activeIndex],
+          dateTime: this.dateTimes[this.activeIndex],
           selectDay: this.selectDay,
-          step: this.step
+          step: this.step,
+          selectDayDateTime: this.selectDay + mark + this.dateTimes[this.activeIndex],
+          selectDayDateTimes
         });
       },
       // 设置格子

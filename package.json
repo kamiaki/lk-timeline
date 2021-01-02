@@ -1,7 +1,7 @@
 {
   "name": "aki_vue_timeline",
   "description": "这是一个时间线组件,由 liuzhenghe30265/lk-timeline 增加预警",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "author": "aki",
   "license": "MIT",
   "private": false,

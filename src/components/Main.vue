@@ -225,6 +225,16 @@
         }
         return msgObj
       },
+      getDayDateTimes() {
+        let selectDayDateTimes = []
+        for (let i = 0; i < this.dateTimes.length; i++) {
+          selectDayDateTimes.push(this.selectDay + mark + this.dateTimes[i])
+        }
+        let msgObj = {
+          selectDayDateTimes
+        }
+        return msgObj
+      },
       // 获取步长
       watchChange() {
         this.activeIndex = 0 //指针归零

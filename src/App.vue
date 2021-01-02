@@ -55,7 +55,7 @@
     },
     methods: {
       getmsg(){
-        console.info(this.$refs.timeLine.getTimeLineInfo());
+        console.info(this.$refs.timeLine.getDayDateTimes());
       },
       getInitParams(step) {
         console.info(step)

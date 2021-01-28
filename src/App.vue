@@ -8,11 +8,15 @@
     <Main @getInitParams="getInitParams"
           @watchDateFun="watchDateFun"
           @watchChange="watchChange"
+
           :stepTypes="stepTypes"
           :dateSelection="dates"
+
           :isWarning="true"
-          :warningHourRange="24"
-          ref="timeLine"></Main>
+          :warningHourRange="3"
+
+          ref="timeLine"
+    ></Main>
   </div>
 </template>
 
@@ -26,8 +30,7 @@
       return {
         date: undefined,
         dates: [
-          {dateStr: '2020-11-22', event: '雷电'},
-          {dateStr: '2020-11-23', event: '雷电'},
+          {dateStr: '2021-01-28', event: '雷电'},
           {dateStr: '2020-11-24', event: ''}
         ],
         stepTypes: ['10', '30', '60', '180']
@@ -37,35 +40,37 @@
       Main
     },
     mounted() {
-      // 获取最近 10 天的日期
-      let list = []
-      for (let i = 0; i < 10; i++) {
-        list.unshift(
-          dateFormat(
-            new Date(
-              new Date().setDate(new Date().getDate() - i)
-            ).toLocaleDateString(),
-            'MM-dd'
-          )
-        )
-      }
-      // this.date = list[0]
-      // this.dateTimes = list
-      this.date = 'asdsadsa'
+      // 获取最近 2 天的日期
+      let list = [
+        {dateStr: dateFormat(new Date(), 'yyyy-MM-dd'), event: '♦'},
+        {
+          dateStr:
+            dateFormat(
+              new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString()
+              , 'yyyy-MM-dd'),
+          event: ''
+        }
+      ]
+      this.date = '时间轴'
+      this.dates = list
     },
     methods: {
-      getmsg(){
+      getmsg() {
         console.info(this.$refs.timeLine.getDayDateTimes());
+        console.info(this.$refs.timeLine.getTimeLineInfo());
       },
       getInitParams(step) {
+        // 获取初始化
         console.info(step)
       },
       watchChange(day) {
+        // 改变下拉框
         console.info(day)
       },
       watchDateFun(time) {
+        // 播放回调
         console.log(time)
-        this.date = time.dateTimes
+        this.date = time.selectDayDateTime
       }
     }
   }

@@ -12,7 +12,7 @@
           :stepTypes="stepTypes"
           :dateSelection="dates"
 
-          :isWarning="true"
+          :isWarning="false"
           :warningHourRange="3"
 
           ref="timeLine"

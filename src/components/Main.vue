@@ -92,7 +92,7 @@
         activeIndex: 0, // 当前的时间位置
         hoverIndex: 0, // 鼠标移入的时间位置
         dateSelect: false,  // 播放时,不可选择间隔和日期
-        redIndex: 5, // 预警红色格子的位置
+        redIndex: -1, // 预警红色格子的位置 -1代表没有
         // 参数相关 //////////////////////////////////////////
         selectDay: '',  // 选择的日期
         step: 0,  // 选择的间隔步长 例如 10min 30min
@@ -188,7 +188,7 @@
       });
     },
     methods: {
-      // 设置格子
+      // ////////////////// 设置刻度 关键方法
       setDateTimes() {
         this.dateTimes.length = 0
         // 判断是不是预警
@@ -216,11 +216,22 @@
           }
           this.redIndex = this.dateTimes.length / 2
         } else {
-          for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
-            let str
-            str = minToHour(i)
-            this.dateTimes.push(str)
+          if (this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')){
+            // 如果选择的是今天
+            for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
+              let str
+              str = minToHour(i)
+              this.dateTimes.push(str)
+            }
+          }else {
+            // 不是今天
+            for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
+              let str
+              str = minToHour(i)
+              this.dateTimes.push(str)
+            }
           }
+          // 设置非预警
           this.redIndex = -1
         }
       },
@@ -255,13 +266,11 @@
         mainjs.speedQuick(this)
       },
       /////////////////////////////////////////////////// 主动调用的方法
-      // 主动获取时间轴数据 ref="timeLine"
-      // this.$refs.timeLine.getTimeLineInfo()
+      // 主动获取时间轴数据 ref="timeLine" this.$refs.timeLine.getTimeLineInfo()
       getTimeLineInfo() {
         return mainjs.getTimeLineInfo(this)
       },
-      // 主动获取 刻度对应的数组 如[2020-11-11T00:00, 2020-11-11T10:00] ref="timeLine"
-      // this.$refs.timeLine.getDayDateTimes()
+      // 主动获取 刻度对应的数组 如[2020-11-11T00:00, 2020-11-11T10:00] ref="timeLine" this.$refs.timeLine.getDayDateTimes()
       getDayDateTimes() {
         return mainjs.getDayDateTimes(this)
       },

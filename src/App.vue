@@ -12,8 +12,8 @@
           :stepTypes="stepTypes"
           :dateSelection="dates"
 
-          :isWarning="false"
-          :warningHourRange="3"
+          :isWarning="true"
+          :warningHourRange="23"
 
           ref="timeLine"
     ></Main>

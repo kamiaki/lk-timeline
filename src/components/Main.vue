@@ -194,10 +194,12 @@
         // 判断是不是预警
         if (this.isWarning && this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')) {
           // 获取当前时间 ，整到小时
-          let minute = hourToMin(dateFormat(new Date(), 'HH') + ':00')
+          let nowDate = dateFormat(new Date(), 'HH:mm')
+          let minute = hourToMin(nowDate.substr(0, nowDate.length - 1) + '0')
           // 将当前时间减少，warningHourRange 小时
           let minMinute = minute - this.warningHourRange * 60
           let maxMinute = minute + this.warningHourRange * 60
+          let dayCount = Math.ceil(this.warningHourRange / 24)  // 这个使用来看 超过了几天
           // 根据减 warningHourRange 小时的这个时间，去叠加 step，一共叠加到 warningHourRange * 2 小时
           for (let i = minMinute; i < maxMinute; i += Number(this.step)) {
             let str
@@ -216,14 +218,14 @@
           }
           this.redIndex = this.dateTimes.length / 2
         } else {
-          if (this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')){
+          if (this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')) {
             // 如果选择的是今天
             for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
               let str
               str = minToHour(i)
               this.dateTimes.push(str)
             }
-          }else {
+          } else {
             // 不是今天
             for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
               let str

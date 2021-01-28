@@ -193,7 +193,7 @@
         this.dateTimes.length = 0
         // 判断是不是预警
         if (this.isWarning && this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')) {
-          // 获取当前时间 ，整到小时
+          // 获取当前时间 ，取整到 10分钟
           let nowDate = dateFormat(new Date(), 'HH:mm')
           let minute = hourToMin(nowDate.substr(0, nowDate.length - 1) + '0')
           // 将当前时间减少，warningHourRange 小时

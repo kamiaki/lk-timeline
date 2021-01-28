@@ -13,7 +13,7 @@
           :dateSelection="dates"
 
           :isWarning="true"
-          :warningHourRange="23"
+          :warningHourRange="3"
 
           ref="timeLine"
     ></Main>
@@ -28,10 +28,21 @@
     name: 'app',
     data() {
       return {
-        date: undefined,
+        date: '标题',
         dates: [
-          {dateStr: '2021-01-28', event: '雷电'},
-          {dateStr: '2020-11-24', event: ''}
+          {dateStr: dateFormat(new Date(), 'yyyy-MM-dd'), event: '♦'},
+          {
+            dateStr: dateFormat(new Date(new Date().setDate(new Date().getDate() - 1)), 'yyyy-MM-dd'),
+            event: ''
+          },
+          {
+            dateStr: dateFormat(new Date(new Date().setDate(new Date().getDate() - 2)), 'yyyy-MM-dd'),
+            event: ''
+          },
+          {
+            dateStr: dateFormat(new Date(new Date().setDate(new Date().getDate() - 3)), 'yyyy-MM-dd'),
+            event: ''
+          }
         ],
         stepTypes: ['10', '30', '60', '180']
       }
@@ -41,18 +52,6 @@
     },
     mounted() {
       // 获取最近 2 天的日期
-      let list = [
-        {dateStr: dateFormat(new Date(), 'yyyy-MM-dd'), event: '♦'},
-        {
-          dateStr:
-            dateFormat(
-              new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString()
-              , 'yyyy-MM-dd'),
-          event: ''
-        }
-      ]
-      this.date = '时间轴'
-      this.dates = list
     },
     methods: {
       getmsg() {

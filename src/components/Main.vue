@@ -73,7 +73,7 @@
 </template>
 <script>
   import mainjs from './mainjs'
-  import {dateFormat, minToHour, hourToMin} from 'aki_js_utils' // 日期格式化
+  import akiUtils from 'aki_js_utils' // 日期格式化
   const mark = 'T'
 
   export default {
@@ -93,8 +93,8 @@
         hoverIndex: 0, // 鼠标移入的时间位置
         redIndex: -1, // 预警红色格子的位置 -1代表没有
         // 参数相关 //////////////////////////////////////////
-        selectDay: undefined,  // 选择的日期
-        step: undefined,  // 选择的间隔步长 例如 10min 30min
+        selectDay: '',  // 选择的日期
+        step: 10,  // 选择的间隔步长 例如 10min 30min
         dateTimes: [] // 所有帧内容的集合
       }
     },
@@ -159,7 +159,7 @@
           dateTime: this.dateTimes[this.activeIndex],
           selectDay: this.selectDay,
           step: this.step,
-          selectDayDateTime: this.selectDay + mark + this.dateTimes[this.activeIndex]
+          selectDayDateTime: this.dateTimes[this.activeIndex]
         })
       }
     },
@@ -171,60 +171,59 @@
       // 初始化可以用这个方法拿到参数
       let selectDayDateTimes = []
       for (let i = 0; i < this.dateTimes.length; i++) {
-        selectDayDateTimes.push(this.selectDay + mark + this.dateTimes[i])
+        selectDayDateTimes.push( this.dateTimes[i])
       }
       this.$emit('getInitParams', {
         dateTime: this.dateTimes[this.activeIndex],
         selectDay: this.selectDay,
         step: this.step,
-        selectDayDateTime: this.selectDay + mark + this.dateTimes[this.activeIndex],
+        selectDayDateTime:  this.dateTimes[this.activeIndex],
         selectDayDateTimes: selectDayDateTimes
       });
     },
     methods: {
       // ////////////////// 设置刻度 关键方法
       setDateTimes() {
+        const step = new Number(this.step)
+        const warningHourRange = new Number(this.warningHourRange)
+        let newDate = new Date()
         this.dateTimes.length = 0
         // 判断是不是预警
-        if (this.isWarning && this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')) {
+        if (this.isWarning && this.selectDay === akiUtils.dateFormat(newDate, 'yyyy-MM-dd')) {
           // 获取当前时间 ，取整到 10分钟
-          let nowDate = dateFormat(new Date(), 'HH:mm')
-          let minute = hourToMin(nowDate.substr(0, nowDate.length - 1) + '0')
+          let floorDate = akiUtils.floorTo10Minutes(newDate)
           // 将当前时间减少，warningHourRange 小时
-          let minMinute = minute - this.warningHourRange * 60
-          let maxMinute = minute + this.warningHourRange * 60
-          let dayCount = Math.ceil(this.warningHourRange / 24)  // 这个使用来看 超过了几天
-          // 根据减 warningHourRange 小时的这个时间，去叠加 step，一共叠加到 warningHourRange * 2 小时
-          for (let i = minMinute; i < maxMinute; i += Number(this.step)) {
-            let str
-            let ii
-            if (i < 0) {
-              ii = i + 1440
-              str = '-' + minToHour(ii)
-            } else if (i > 1440) {
-              ii = i - 1440
-              str = '+' + minToHour(ii)
-            } else {
-              ii = i
-              str = minToHour(ii)
-            }
-            this.dateTimes.push(str)
+          let startDate = akiUtils.changeDate(floorDate, 'HH', -warningHourRange)
+          let endDate = akiUtils.changeDate(floorDate, 'HH', warningHourRange)
+          let after = new Date(startDate)
+          while (after <= endDate) {
+            this.dateTimes.push(akiUtils.dateFormat(after, 'yyyy-MM-ddTHH:mm:ss'))
+            after = akiUtils.changeDate(after, 'mm', step)
           }
-          this.redIndex = this.dateTimes.length / 2
+          this.redIndex = Math.floor(this.dateTimes.length / 2)
         } else {
-          if (this.selectDay === dateFormat(new Date(), 'yyyy-MM-dd')) {
+          if (this.selectDay === akiUtils.dateFormat(newDate, 'yyyy-MM-dd')) {
             // 如果选择的是今天
-            for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
-              let str
-              str = minToHour(i)
-              this.dateTimes.push(str)
+            // 获取当前时间 ，取整到 10分钟
+            let floorDate = akiUtils.floorTo10Minutes(newDate)
+            // 将当前时间减少，24 小时
+            let startDate = akiUtils.changeDate(floorDate, 'HH', -24)
+            let endDate = new Date(floorDate)
+            let after = new Date(startDate)
+            while (after <= endDate) {
+              this.dateTimes.push(akiUtils.dateFormat(after, 'yyyy-MM-ddTHH:mm:ss'))
+              after = akiUtils.changeDate(after, 'mm', step)
             }
           } else {
             // 不是今天
-            for (let i = 0; i <= 1440; i += Number(this.step)) {// 1440 = 24 * 60
-              let str
-              str = minToHour(i)
-              this.dateTimes.push(str)
+            const selectDay = new String(this.selectDay)
+            let formatDate = selectDay.replace(/-/g,'/')
+            let startDate = new Date(formatDate)
+            let endDate = akiUtils.changeDate(startDate, 'HH', 24)
+            let after = new Date(startDate)
+            while (after <= endDate) {
+              this.dateTimes.push(akiUtils.dateFormat(after, 'yyyy-MM-ddTHH:mm:ss'))
+              after = akiUtils.changeDate(after, 'mm', step)
             }
           }
           // 设置非预警

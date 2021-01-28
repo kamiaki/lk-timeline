@@ -11,7 +11,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "aki_js_utils": "^1.1.2",
+    "aki_js_utils": "^1.1.6",
     "vue": "^2.5.11"
   },
   "browserslist": [

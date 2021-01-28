@@ -28,7 +28,7 @@
       <!--间隔选择-->
       <div style="float: left;margin-left: 10px">
         <span>间隔</span>
-        <select @change="watchChange" v-model="step" style="height: 30px" :disabled="dateSelect">
+        <select @change="watchChange" v-model="step" style="height: 30px" :disabled="playing">
           <option :value="stepType" v-for="(stepType, index) in stepTypes" :key="index">
             {{stepType+'min'}}
           </option>
@@ -37,7 +37,7 @@
       <!--日期选择-->
       <div style="float: left;margin-left: 10px">
         <span>日期</span>
-        <select @change="watchChange" v-model="selectDay" style="height: 30px" :disabled="dateSelect">
+        <select @change="watchChange" v-model="selectDay" style="height: 30px" :disabled="playing">
           <option :value="obj.dateStr" v-for="(obj, index) in dateSelection" :key="index">{{obj.dateStr + ' ' +
             obj.event}}
           </option>
@@ -81,22 +81,21 @@
     data() {
       return {
         // 没什么用的 //////////////////////////////////////////
-        dateTimeIndexes: [], // 日期刻度列表
+        dateTimeIndexes: [], // 日期刻度列表 记录那些刻度需要显示标尺标识
         // 播放相关 //////////////////////////////////////////
         options: {
           speed: 1, // 当前速度速度
           speedMax: 5 // 速度最大值
         },
-        intervalTimer: null, // 定时器
+        intervalTimer: null, // 定时器 number
         playing: false, // 播放
         activeIndex: 0, // 当前的时间位置
         hoverIndex: 0, // 鼠标移入的时间位置
-        dateSelect: false,  // 播放时,不可选择间隔和日期
         redIndex: -1, // 预警红色格子的位置 -1代表没有
         // 参数相关 //////////////////////////////////////////
-        selectDay: '',  // 选择的日期
-        step: 0,  // 选择的间隔步长 例如 10min 30min
-        dateTimes: [] // 显示多少个格子
+        selectDay: undefined,  // 选择的日期
+        step: undefined,  // 选择的间隔步长 例如 10min 30min
+        dateTimes: [] // 所有帧内容的集合
       }
     },
     props: {
@@ -147,15 +146,11 @@
           this.intervalTimer = setInterval(() => {
             this.activeIndex = (this.activeIndex + 1) % this.dateTimes.length
           }, this.options.speed * 1000)
-          // 日期不让选
-          this.dateSelect = true
         } else {
           if (this.intervalTimer) {
             clearInterval(this.intervalTimer)
             this.intervalTimer = null
           }
-          // 日期让选
-          this.dateSelect = false
         }
       },
       // 只要播放，数据发生改变，就调用
@@ -173,12 +168,11 @@
       this.step = this.stepTypes[0] // 默认步长
       this.setDateTimes() // 设置格子
       this.initTimeLineScale()// 初始化刻度尺
-      // 初始化传送相关参数
+      // 初始化可以用这个方法拿到参数
       let selectDayDateTimes = []
       for (let i = 0; i < this.dateTimes.length; i++) {
         selectDayDateTimes.push(this.selectDay + mark + this.dateTimes[i])
       }
-      // 初始化可以用这个方法拿到参数
       this.$emit('getInitParams', {
         dateTime: this.dateTimes[this.activeIndex],
         selectDay: this.selectDay,

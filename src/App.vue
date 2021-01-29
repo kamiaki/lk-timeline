@@ -55,8 +55,10 @@
     },
     methods: {
       getmsg() {
+        // 主动获取 所有帧
         console.info('getDayDateTimes')
         console.info(this.$refs.timeLine.getDayDateTimes());
+        // 主动获取 当前帧
         console.info('getTimeLineInfo')
         console.info(this.$refs.timeLine.getTimeLineInfo());
       },

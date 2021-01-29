@@ -85,10 +85,10 @@ const speedQuick = (VUE) => {
 // VUE.$refs.timeLine.getTimeLineInfo()
 const getTimeLineInfo = (VUE) => {
   let msgObj = {
-    dateTime: VUE.dateTimes[VUE.activeIndex],
+    dateTimeText: VUE.dateTimes[VUE.activeIndex].text,
     selectDay: VUE.selectDay,
     step: VUE.step,
-    selectDayDateTime: VUE.dateTimes[VUE.activeIndex]
+    selectDayDateTime: VUE.dateTimes[VUE.activeIndex].value
   }
   return msgObj
 }
@@ -97,7 +97,7 @@ const getTimeLineInfo = (VUE) => {
 const getDayDateTimes = (VUE) => {
   let selectDayDateTimes = []
   for (let i = 0; i < VUE.dateTimes.length; i++) {
-    selectDayDateTimes.push(VUE.dateTimes[i])
+    selectDayDateTimes.push(VUE.dateTimes[i].value)
   }
   return {selectDayDateTimes}
 }
@@ -107,13 +107,13 @@ const watchChange = (VUE) => {
   VUE.setDateTimes() // 设置格子
   let selectDayDateTimes = []
   for (let i = 0; i < VUE.dateTimes.length; i++) {
-    selectDayDateTimes.push(VUE.dateTimes[i])
+    selectDayDateTimes.push(VUE.dateTimes[i].value)
   }
   VUE.$emit('watchChange', {
-    dateTime: VUE.dateTimes[VUE.activeIndex],
+    dateTimeText: VUE.dateTimes[VUE.activeIndex].text,
     selectDay: VUE.selectDay,
     step: VUE.step,
-    selectDayDateTime: VUE.dateTimes[VUE.activeIndex],
+    selectDayDateTime: VUE.dateTimes[VUE.activeIndex].value,
     selectDayDateTimes
   });
 }

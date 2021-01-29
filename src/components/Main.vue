@@ -48,7 +48,7 @@
     <div class="wai">
       <div class="timeline_axis">
         <div class="axis_item"
-             v-for="(time, index) in dateTimes"
+             v-for="(obj, index) in dateTimes"
              :key="index">
           <div class="axis_item_tick"
                :class="{ 'axis_item_tick_active':index === highlightIndex ,
@@ -60,11 +60,11 @@
           </div>
           <div class="axis_item_label"
                v-if="dateTimeIndexes.indexOf(index) >=0 ">
-            {{ time }}
+            {{ obj.text}}
           </div>
           <div class="axis_item_tip"
                v-if="index === highlightIndex || index === hoverIndex">
-            {{ time}}
+            {{ obj.text}}
           </div>
         </div>
       </div>
@@ -156,10 +156,10 @@
       // 只要播放，数据发生改变，就调用
       activeIndex() {
         this.$emit('watchDateFun', {
-          dateTime: this.dateTimes[this.activeIndex],
+          dateTimeText: this.dateTimes[this.activeIndex].text,
           selectDay: this.selectDay,
           step: this.step,
-          selectDayDateTime: this.dateTimes[this.activeIndex]
+          selectDayDateTime: this.dateTimes[this.activeIndex].value
         })
       }
     },
@@ -171,13 +171,13 @@
       // 初始化可以用这个方法拿到参数
       let selectDayDateTimes = []
       for (let i = 0; i < this.dateTimes.length; i++) {
-        selectDayDateTimes.push( this.dateTimes[i])
+        selectDayDateTimes.push(this.dateTimes[i].value)
       }
       this.$emit('getInitParams', {
-        dateTime: this.dateTimes[this.activeIndex],
+        dateTimeText: this.dateTimes[this.activeIndex].text,
         selectDay: this.selectDay,
         step: this.step,
-        selectDayDateTime:  this.dateTimes[this.activeIndex],
+        selectDayDateTime: this.dateTimes[this.activeIndex].value,
         selectDayDateTimes: selectDayDateTimes
       });
     },
@@ -197,7 +197,11 @@
           let endDate = akiUtils.changeDate(floorDate, 'HH', warningHourRange)
           let after = new Date(startDate)
           while (after <= endDate) {
-            this.dateTimes.push(akiUtils.dateFormat(after, 'yyyy-MM-ddTHH:mm:ss'))
+            let obj = {
+              text: akiUtils.dateFormat(after, 'HH:mm')
+              , value: akiUtils.dateFormat(after, 'yyyy-MM-ddTHH:mm:ss')
+            }
+            this.dateTimes.push(obj)
             after = akiUtils.changeDate(after, 'mm', step)
           }
           this.redIndex = Math.floor(this.dateTimes.length / 2)
@@ -211,18 +215,26 @@
             let endDate = new Date(floorDate)
             let after = new Date(startDate)
             while (after <= endDate) {
-              this.dateTimes.push(akiUtils.dateFormat(after, 'yyyy-MM-ddTHH:mm:ss'))
+              let obj = {
+                text: akiUtils.dateFormat(after, 'HH:mm')
+                , value: akiUtils.dateFormat(after, 'yyyy-MM-ddTHH:mm:ss')
+              }
+              this.dateTimes.push(obj)
               after = akiUtils.changeDate(after, 'mm', step)
             }
           } else {
             // 不是今天
             const selectDay = new String(this.selectDay)
-            let formatDate = selectDay.replace(/-/g,'/')
+            let formatDate = selectDay.replace(/-/g, '/')
             let startDate = new Date(formatDate)
             let endDate = akiUtils.changeDate(startDate, 'HH', 24)
             let after = new Date(startDate)
             while (after <= endDate) {
-              this.dateTimes.push(akiUtils.dateFormat(after, 'yyyy-MM-ddTHH:mm:ss'))
+              let obj = {
+                text: akiUtils.dateFormat(after, 'HH:mm')
+                , value: akiUtils.dateFormat(after, 'yyyy-MM-ddTHH:mm:ss')
+              }
+              this.dateTimes.push(obj)
               after = akiUtils.changeDate(after, 'mm', step)
             }
           }

@@ -55,19 +55,24 @@
     },
     methods: {
       getmsg() {
+        console.info('getDayDateTimes')
         console.info(this.$refs.timeLine.getDayDateTimes());
+        console.info('getTimeLineInfo')
         console.info(this.$refs.timeLine.getTimeLineInfo());
       },
       getInitParams(step) {
         // 获取初始化
+        console.info('getInitParams')
         console.info(step)
       },
       watchChange(day) {
         // 改变下拉框
+        console.info('watchChange')
         console.info(day)
       },
       watchDateFun(time) {
         // 播放回调
+        console.log('watchDateFun')
         console.log(time)
         this.date = time.selectDayDateTime
       }

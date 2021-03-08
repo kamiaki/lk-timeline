@@ -191,8 +191,7 @@
         // 判断是不是预警
         if (this.isWarning && this.selectDay === akiUtils.dateFormat(newDate, 'yyyy-MM-dd')) {
           // 获取当前时间 ，取整到 60分钟
-          let floorDate = akiUtils.floorTo10Minutes(newDate)
-          console.info(floorDate)
+          let floorDate = akiUtils.floorTo60Minutes(newDate)
           // 将当前时间减少，warningHourRange 小时
           let startDate = akiUtils.changeDate(floorDate, 'HH', -warningHourRange)
           let endDate = akiUtils.changeDate(floorDate, 'HH', warningHourRange)

@@ -95,7 +95,8 @@
         // 参数相关 //////////////////////////////////////////
         selectDay: undefined,  // 选择的日期
         step: undefined,  // 选择的间隔步长 例如 10min 30min
-        dateTimes: [] // 所有帧内容的集合
+        dateTimes: [], // 所有帧内容的集合
+        isPlayToday: false // 是否播放最新的一天
       }
     },
     props: {
@@ -143,6 +144,12 @@
     watch: {
       playing() {
         if (this.playing) {
+          // 是否播放最新的一天
+          if (this.selectDay === akiUtils.dateFormat(new Date(), 'yyyy-MM-dd')) {
+            this.isPlayToday = true
+          } else {
+            this.isPlayToday = false
+          }
           this.intervalTimer = setInterval(() => {
             this.activeIndex = (this.activeIndex + 1) % this.dateTimes.length
           }, this.options.speed * 1000)
@@ -178,10 +185,10 @@
           }
         }
         // 初始化各种参数
-        if (!this.selectDay || this.selectDay === akiUtils.dateFormat(new Date(), 'yyyy-MM-dd')){
-          this.selectDay = this.dateSelection[0].dateStr // 如果选择天数为空, 或者选择天数是今天, 就刷新选择天数据
+        if (!this.selectDay || this.isPlayToday) {
+          this.selectDay = this.dateSelection[0].dateStr // 如果选择天数为空, 播的是最新的一天, 就刷新选择天数据
         }
-        if (!this.step){
+        if (!this.step) {
           this.step = this.stepTypes[0] // 默认步长 如果步长没有值, 就赋值
         }
         this.setDateTimes() // 设置格子

@@ -93,8 +93,8 @@
         hoverIndex: 0, // 鼠标移入的时间位置
         redIndex: -1, // 预警红色格子的位置 -1代表没有
         // 参数相关 //////////////////////////////////////////
-        selectDay: '',  // 选择的日期
-        step: 10,  // 选择的间隔步长 例如 10min 30min
+        selectDay: undefined,  // 选择的日期
+        step: undefined,  // 选择的间隔步长 例如 10min 30min
         dateTimes: [] // 所有帧内容的集合
       }
     },
@@ -178,8 +178,12 @@
           }
         }
         // 初始化各种参数
-        this.selectDay = this.dateSelection[0].dateStr // 默认天数
-        this.step = this.stepTypes[0] // 默认步长
+        if (!this.selectDay || this.selectDay === akiUtils.dateFormat(new Date(), 'yyyy-MM-dd')){
+          this.selectDay = this.dateSelection[0].dateStr // 如果选择天数为空, 或者选择天数是今天, 就刷新选择天数据
+        }
+        if (!this.step){
+          this.step = this.stepTypes[0] // 默认步长 如果步长没有值, 就赋值
+        }
         this.setDateTimes() // 设置格子
         this.initTimeLineScale()// 初始化刻度尺
         let selectDayDateTimes = []

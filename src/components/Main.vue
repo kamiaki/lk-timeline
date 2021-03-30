@@ -164,24 +164,44 @@
       }
     },
     mounted() {
-      this.selectDay = this.dateSelection[0].dateStr // 默认天数
-      this.step = this.stepTypes[0] // 默认步长
-      this.setDateTimes() // 设置格子
-      this.initTimeLineScale()// 初始化刻度尺
-      // 初始化可以用这个方法拿到参数
-      let selectDayDateTimes = []
-      for (let i = 0; i < this.dateTimes.length; i++) {
-        selectDayDateTimes.push(this.dateTimes[i].value)
-      }
-      this.$emit('getInitParams', {
-        dateTimeText: this.dateTimes[this.activeIndex].text,
-        selectDay: this.selectDay,
-        step: this.step,
-        selectDayDateTime: this.dateTimes[this.activeIndex].value,
-        selectDayDateTimes: selectDayDateTimes
-      });
+      this.refreshTimeLine()
     },
     methods: {
+      refreshTimeLine() {
+        // 如果是播放状态, 先停止播放, 记录下之前是播放着的
+        let beforeIsPlay = false
+        if (this.playing) {
+          if (this.intervalTimer) {
+            clearInterval(this.intervalTimer)
+            this.intervalTimer = null
+            beforeIsPlay = true
+          }
+        }
+        // 初始化各种参数
+        this.selectDay = this.dateSelection[0].dateStr // 默认天数
+        this.step = this.stepTypes[0] // 默认步长
+        this.setDateTimes() // 设置格子
+        this.initTimeLineScale()// 初始化刻度尺
+        let selectDayDateTimes = []
+        for (let i = 0; i < this.dateTimes.length; i++) {
+          selectDayDateTimes.push(this.dateTimes[i].value)
+        }
+        // 初始化可以用这个方法拿到参数
+        this.$emit('getInitParams', {
+          dateTimeText: this.dateTimes[this.activeIndex].text,
+          selectDay: this.selectDay,
+          step: this.step,
+          selectDayDateTime: this.dateTimes[this.activeIndex].value,
+          selectDayDateTimes: selectDayDateTimes
+        });
+        // 根据之前是否播放来播放
+        if (beforeIsPlay) {
+          this.intervalTimer = setInterval(() => {
+            this.activeIndex = (this.activeIndex + 1) % this.dateTimes.length
+          }, this.options.speed * 1000)
+        }
+      }
+      ,
       // ////////////////// 设置刻度 关键方法
       setDateTimes() {
         const step = new Number(this.step)
@@ -191,7 +211,7 @@
         // 判断是不是预警
         if (this.isWarning && this.selectDay === akiUtils.dateFormat(newDate, 'yyyy-MM-dd')) {
           // 获取当前时间 ，取整到 60分钟
-          let floorDate = akiUtils.floorTo60Minutes(newDate)
+          let floorDate = akiUtils.floorTo10Minutes(newDate)
           // 将当前时间减少，warningHourRange 小时
           let startDate = akiUtils.changeDate(floorDate, 'HH', -warningHourRange)
           let endDate = akiUtils.changeDate(floorDate, 'HH', warningHourRange)
@@ -241,46 +261,56 @@
           // 设置非预警
           this.redIndex = -1
         }
-      },
+      }
+      ,
       //////////////////////////// 之前的方法
       // 初始化时间轴刻度
       initTimeLineScale() {
         return;// 不要刻度
         mainjs.initTimeLineScale(this)
-      },
+      }
+      ,
       // 点击刻度
       tickClick(index) {
         mainjs.tickClick(this, index)
-      },
+      }
+      ,
       // 播放和暂停
       togglePlay() {
         mainjs.togglePlay(this)
-      },
+      }
+      ,
       // 时间退后一日
       backward() {
         mainjs.backward(this)
-      },
+      }
+      ,
       // 时间前进一日
       forward() {
         mainjs.forward(this)
-      },
+      }
+      ,
       // 减慢速度
       speedSlow() {
         mainjs.speedSlow(this)
-      },
+      }
+      ,
       // 加快速度
       speedQuick() {
         mainjs.speedQuick(this)
-      },
+      }
+      ,
       /////////////////////////////////////////////////// 主动调用的方法
       // 主动获取时间轴数据 ref="timeLine" this.$refs.timeLine.getTimeLineInfo()
       getTimeLineInfo() {
         return mainjs.getTimeLineInfo(this)
-      },
+      }
+      ,
       // 主动获取 刻度对应的数组 如[2020-11-11T00:00, 2020-11-11T10:00] ref="timeLine" this.$refs.timeLine.getDayDateTimes()
       getDayDateTimes() {
         return mainjs.getDayDateTimes(this)
-      },
+      }
+      ,
       // 重新选择条件 之后触发的获取事件
       watchChange() {
         mainjs.watchChange(this)

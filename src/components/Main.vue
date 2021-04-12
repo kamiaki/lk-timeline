@@ -45,8 +45,8 @@
              :key="index">
           <div class="axis_item_tick"
                :class="{ 'axis_item_tick_active':index === highlightIndex ,
-                'set_red': index === redIndex,
-                'set_notRed': index !== redIndex}"
+                'set_red': index === redIndex && index != highlightIndex,
+                'set_notRed': index !== redIndex && index != highlightIndex}"
                @mouseenter="hoverIndex = index"
                @mouseleave="hoverIndex = -1"
                @click="tickClick(index)">

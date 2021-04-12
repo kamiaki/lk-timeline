@@ -5,18 +5,17 @@
       style="margin:0;text-align:center;">
       {{this.date}}
     </h2>
-    <Main @getInitParams="getInitParams"
-          @watchDateFun="watchDateFun"
-          @watchChange="watchChange"
-
-          :stepTypes="stepTypes"
-          :dateSelection="dates"
-
-          :isWarning="true"
-          :warningHourRange="3"
-
-          ref="timeLine"
-    ></Main>
+    <div class="timeline_div">
+      <Main @getInitParams="getInitParams"
+            @watchDateFun="watchDateFun"
+            @watchChange="watchChange"
+            :stepTypes="stepTypes"
+            :dateSelection="dates"
+            :isWarning="true"
+            :warningHourRange="3"
+            ref="timeLine"
+      ></Main>
+    </div>
   </div>
 </template>
 
@@ -81,3 +80,16 @@
     }
   }
 </script>
+<style>
+  .timeline_div {
+    background-color: rgba(17, 28, 110, 0.3);
+    border-radius: 10px;
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 55%;
+    z-index: 999;
+  }
+</style>

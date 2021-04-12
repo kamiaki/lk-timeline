@@ -17,7 +17,7 @@
       <!--间隔选择-->
       <div class="step_setting">
         <span>间隔</span>
-        <select @change="watchChange" v-model="step" style="height: 30px" :disabled="playing">
+        <select class="select_setting" @change="watchChange" v-model="step" :disabled="playing">
           <option :value="stepType" v-for="(stepType, index) in stepTypes" :key="index">
             {{stepType+'min'}}
           </option>
@@ -26,7 +26,7 @@
       <!--日期选择-->
       <div class="date_setting">
         <span>日期</span>
-        <select @change="watchChange" v-model="selectDay" style="height: 30px" :disabled="playing">
+        <select class="select_setting" @change="watchChange" v-model="selectDay" :disabled="playing">
           <option :value="obj.dateStr" v-for="(obj, index) in dateSelection" :key="index">{{obj.dateStr + ' ' +
             obj.event}}
           </option>

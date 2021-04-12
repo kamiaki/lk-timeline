@@ -1,32 +1,21 @@
 <template>
   <div class="timeline_main">
+    <!--控制播放-->
     <div class="timeline_control">
       <!--播放-->
       <div class="menu_play">
-        <i class="menu_icon icon_left"
-           :class="{'menu_icon_disabled':playing}"
-           @click="backward"></i>
-        <i class="menu_icon"
-           :class="{'icon_play':!playing, 'icon_pause':playing}"
-           @click="togglePlay"
-           @mouseleave="hoverIndex = -1"></i>
-        <i class="menu_icon icon_right"
-           :class="{'menu_icon_disabled':playing}"
-           @click="forward"></i>
+        <i class="menu_icon icon_left" :class="{'menu_icon_disabled':playing}" @click="backward"></i>
+        <i class="menu_icon" :class="{'icon_play':!playing, 'icon_pause':playing}" @click="togglePlay"></i>
+        <i class="menu_icon icon_right" :class="{'menu_icon_disabled':playing}" @click="forward"></i>
       </div>
       <!--速度调节-->
       <div class="menu_setting">
-        <i class="menu_icon icon_up"
-           :class="{'menu_icon_disabled':playing}"
-           @click="speedSlow"></i>
-        <i
-          class="speed">{{ options.speed.toFixed(1) }}</i>
-        <i class="menu_icon icon_down"
-           :class="{'menu_icon_disabled':playing}"
-           @click="speedQuick"></i>
+        <i class="menu_icon icon_up" :class="{'menu_icon_disabled':playing}" @click="speedSlow"></i>
+        <i class="speed">{{ options.speed.toFixed(1) }}</i>
+        <i class="menu_icon icon_down" :class="{'menu_icon_disabled':playing}" @click="speedQuick"></i>
       </div>
       <!--间隔选择-->
-      <div style="float: left;margin-left: 10px">
+      <div class="step_setting">
         <span>间隔</span>
         <select @change="watchChange" v-model="step" style="height: 30px" :disabled="playing">
           <option :value="stepType" v-for="(stepType, index) in stepTypes" :key="index">
@@ -35,7 +24,7 @@
         </select>
       </div>
       <!--日期选择-->
-      <div style="float: left;margin-left: 10px">
+      <div class="date_setting">
         <span>日期</span>
         <select @change="watchChange" v-model="selectDay" style="height: 30px" :disabled="playing">
           <option :value="obj.dateStr" v-for="(obj, index) in dateSelection" :key="index">{{obj.dateStr + ' ' +
@@ -43,7 +32,11 @@
           </option>
         </select>
       </div>
-    </div>
+      <!--当前时刻-->
+      <div class="nowTime_setting">
+        <span>{{this.dateTimes[this.highlightIndex].value.replace(mark, ' ')}}</span>
+      </div>
+    </div><!--timeline_control-->
     <!--时间轴-->
     <div class="wai">
       <div class="timeline_axis">
@@ -58,13 +51,9 @@
                @mouseleave="hoverIndex = -1"
                @click="tickClick(index)">
           </div>
-          <div class="axis_item_label"
-               v-if="dateTimeIndexes.indexOf(index) >=0 ">
-            {{ obj.text}}
-          </div>
           <div class="axis_item_tip"
-               v-if="index === highlightIndex || index === hoverIndex">
-            {{ obj.text}}
+               v-if="index === hoverIndex">
+            {{ obj.value.replace(mark,' ')}}
           </div>
         </div>
       </div>
@@ -79,9 +68,8 @@
   export default {
     name: 'lk-timeline',
     data() {
+      this.mark = mark
       return {
-        // 没什么用的 //////////////////////////////////////////
-        dateTimeIndexes: [], // 日期刻度列表 记录那些刻度需要显示标尺标识
         // 播放相关 //////////////////////////////////////////
         options: {
           speed: 1, // 当前速度速度
@@ -90,7 +78,7 @@
         intervalTimer: null, // 定时器 number
         playing: false, // 播放
         activeIndex: 0, // 当前的时间位置
-        hoverIndex: 0, // 鼠标移入的时间位置
+        hoverIndex: -1, // 鼠标移入的时间位置
         redIndex: -1, // 预警红色格子的位置 -1代表没有
         // 参数相关 //////////////////////////////////////////
         selectDay: undefined,  // 选择的日期

@@ -53,7 +53,7 @@
           </div>
           <div class="axis_item_tip"
                v-if="index === hoverIndex">
-            {{selectDateTimeStr}}
+            {{hoverDateTimeStr}}
           </div>
         </div>
       </div>
@@ -121,22 +121,35 @@
       }
     },
     computed: {
+      hoverDateTimeStr() {
+        let s = ''
+        // 防止空指针异常
+        try {
+          s = this.dateTimes[this.hoverIndex].value.replace(mark, ' ')
+        } catch (e) {
+          s = ''
+        }
+        return s
+      },
       selectDateTimeStr() {
         let s = ''
         // 防止空指针异常
         try {
           s = this.dateTimes[this.highlightIndex].value.replace(mark, ' ')
-        }catch (e) {
+        } catch (e) {
           s = ''
         }
         return s
       },
       // 高亮显示， 如果不为空，当前index是这个index
       highlightIndex() {
-        return (
-          (this.activeIndex === -1 && this.dateTimes.length - 1) ||
-          this.activeIndex
-        )
+        let i = 0
+        try {
+          i = ((this.activeIndex === -1 && this.dateTimes.length - 1) || this.activeIndex)
+        }catch (e) {
+          i = 0
+        }
+        return i
       }
     },
     watch: {

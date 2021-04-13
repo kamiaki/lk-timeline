@@ -1,3 +1,5 @@
+import akiUtils from "aki_js_utils"
+
 const mark = 'T'
 // 初始化时间轴刻度
 const initTimeLineScale = (VUE) => {
@@ -116,6 +118,12 @@ const watchChange = (VUE) => {
     selectDayDateTime: VUE.dateTimes[VUE.activeIndex].value,
     selectDayDateTimes
   });
+  // 选择的是否是今天
+  if (VUE.selectDay === akiUtils.dateFormat(new Date(), 'yyyy-MM-dd')) {
+    VUE.isPlayToday = true
+  } else {
+    VUE.isPlayToday = false
+  }
 }
 
 export default {

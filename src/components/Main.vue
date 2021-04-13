@@ -155,12 +155,6 @@
     watch: {
       playing() {
         if (this.playing) {
-          // 是否播放最新的一天
-          if (this.selectDay === akiUtils.dateFormat(new Date(), 'yyyy-MM-dd')) {
-            this.isPlayToday = true
-          } else {
-            this.isPlayToday = false
-          }
           this.intervalTimer = setInterval(() => {
             this.activeIndex = (this.activeIndex + 1) % this.dateTimes.length
           }, this.options.speed * 1000)

@@ -34,7 +34,7 @@
       </div>
       <!--当前时刻-->
       <div class="nowTime_setting">
-        <span>{{this.dateTimes[this.highlightIndex].value.replace(mark, ' ')}}</span>
+        <span>{{selectDateTimeStr}}</span>
       </div>
     </div><!--timeline_control-->
     <!--时间轴-->
@@ -53,7 +53,7 @@
           </div>
           <div class="axis_item_tip"
                v-if="index === hoverIndex">
-            {{ obj.value.replace(mark,' ')}}
+            {{selectDateTimeStr}}
           </div>
         </div>
       </div>
@@ -121,6 +121,16 @@
       }
     },
     computed: {
+      selectDateTimeStr() {
+        let s = ''
+        // 防止空指针异常
+        try {
+          s = this.dateTimes[this.highlightIndex].value.replace(mark, ' ')
+        }catch (e) {
+          s = ''
+        }
+        return s
+      },
       // 高亮显示， 如果不为空，当前index是这个index
       highlightIndex() {
         return (

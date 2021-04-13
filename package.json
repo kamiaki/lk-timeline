@@ -1,7 +1,7 @@
 {
   "name": "aki_vue_timeline",
   "description": "这是一个时间线组件, 欢迎使用 aki 改制, 2021 4 12 样式调整好看了",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "author": "aki",
   "license": "MIT",
   "private": false,

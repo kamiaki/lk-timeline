@@ -84,7 +84,7 @@
         selectDay: undefined,  // 选择的日期
         step: undefined,  // 选择的间隔步长 例如 10min 30min
         dateTimes: [], // 所有帧内容的集合
-        isPlayToday: false // 是否播放最新的一天
+        isSelectToday: true // 是否选择了最新的一天
       }
     },
     props: {
@@ -183,14 +183,11 @@
         // 如果是播放状态, 先停止播放, 记录下之前是播放着的
         let beforeIsPlay = false
         if (this.playing) {
-          if (this.intervalTimer) {
-            clearInterval(this.intervalTimer)
-            this.intervalTimer = null
-            beforeIsPlay = true
-          }
+          this.playing = false
+          beforeIsPlay = true
         }
         // 初始化各种参数
-        if (!this.selectDay || this.isPlayToday) {
+        if (!this.selectDay || this.isSelectToday) {
           this.selectDay = this.dateSelection[0].dateStr // 如果选择天数为空, 播的是最新的一天, 就刷新选择天数据
         }
         if (!this.step) {
@@ -211,11 +208,7 @@
           selectDayDateTimes: selectDayDateTimes
         });
         // 根据之前是否播放来播放
-        if (beforeIsPlay) {
-          this.intervalTimer = setInterval(() => {
-            this.activeIndex = (this.activeIndex + 1) % this.dateTimes.length
-          }, this.options.speed * 1000)
-        }
+        if (beforeIsPlay) this.playing = true
       }
       ,
       // ////////////////// 设置刻度 关键方法

@@ -120,9 +120,9 @@ const watchChange = (VUE) => {
   });
   // 选择的是否是今天
   if (VUE.selectDay === akiUtils.dateFormat(new Date(), 'yyyy-MM-dd')) {
-    VUE.isPlayToday = true
+    VUE.isSelectToday = true
   } else {
-    VUE.isPlayToday = false
+    VUE.isSelectToday = false
   }
 }
 

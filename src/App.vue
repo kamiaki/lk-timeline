@@ -11,7 +11,7 @@
             @watchChange="watchChange"
             :stepTypes="stepTypes"
             :dateSelection="dates"
-            :isWarning="true"
+            :isWarning="false"
             :warningHourRange="3"
             ref="timeLine"
       ></Main>
@@ -50,31 +50,50 @@
       Main
     },
     mounted() {
+      setInterval(() => {
+        console.info('refreshtimeline')
+        this.dates = [
+          {dateStr: dateFormat(new Date(), 'yyyy-MM-dd'), event: '♦'},
+          {
+            dateStr: dateFormat(new Date(new Date().setDate(new Date().getDate() - 1)), 'yyyy-MM-dd'),
+            event: ''
+          },
+          {
+            dateStr: dateFormat(new Date(new Date().setDate(new Date().getDate() - 2)), 'yyyy-MM-dd'),
+            event: ''
+          },
+          {
+            dateStr: dateFormat(new Date(new Date().setDate(new Date().getDate() - 3)), 'yyyy-MM-dd'),
+            event: ''
+          }
+        ]
+        this.$refs.timeLine.refreshTimeLine()
+      }, 5000)
       // 获取最近 2 天的日期
     },
     methods: {
       getmsg() {
         // 主动获取 所有帧
-        console.info('getDayDateTimes')
-        console.info(this.$refs.timeLine.getDayDateTimes());
+        // console.info('getDayDateTimes')
+        // console.info(this.$refs.timeLine.getDayDateTimes());
         // 主动获取 当前帧
-        console.info('getTimeLineInfo')
-        console.info(this.$refs.timeLine.getTimeLineInfo());
+        // console.info('getTimeLineInfo')
+        // console.info(this.$refs.timeLine.getTimeLineInfo());
       },
       getInitParams(step) {
         // 获取初始化
-        console.info('getInitParams')
-        console.info(step)
+        // console.info('getInitParams')
+        // console.info(step)
       },
       watchChange(day) {
         // 改变下拉框
-        console.info('watchChange')
-        console.info(day)
+        // console.info('watchChange')
+        // console.info(day)
       },
       watchDateFun(time) {
         // 播放回调
-        console.log('watchDateFun')
-        console.log(time)
+        // console.log('watchDateFun')
+        // console.log(time)
         this.date = time.selectDayDateTime
       }
     }

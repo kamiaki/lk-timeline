@@ -179,6 +179,16 @@
       this.refreshTimeLine()
     },
     methods: {
+      // 将指针放在最后位置
+      setActiveIndexLast() {
+        let i = this.dateTimes.length - 1;
+        this.activeIndex = i;
+      },
+      // 将指针放在预警红色标识位置
+      setActiveIndexRed() {
+        this.activeIndex = this.redIndex;
+      },
+      // 将指针放在红色位置
       refreshTimeLine() {
         // 如果是播放状态, 先停止播放, 记录下之前是播放着的
         let beforeIsPlay = false
@@ -234,6 +244,7 @@
             after = akiUtils.changeDate(after, 'mm', step)
           }
           this.redIndex = Math.floor(this.dateTimes.length / 2)
+          this.setActiveIndexRed()
         } else {
           if (this.selectDay === akiUtils.dateFormat(newDate, 'yyyy-MM-dd')) {
             // 如果选择的是今天
@@ -251,6 +262,7 @@
               this.dateTimes.push(obj)
               after = akiUtils.changeDate(after, 'mm', step)
             }
+            this.setActiveIndexLast()
           } else {
             // 不是今天
             const selectDay = new String(this.selectDay)

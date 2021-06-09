@@ -146,7 +146,7 @@
         let i = 0
         try {
           i = ((this.activeIndex === -1 && this.dateTimes.length - 1) || this.activeIndex)
-        }catch (e) {
+        } catch (e) {
           i = 0
         }
         return i
@@ -181,14 +181,28 @@
     methods: {
       // 将指针放在最后位置
       setActiveIndexLast() {
-        let i = this.dateTimes.length - 1;
-        this.activeIndex = i;
+        // 当前时刻的指针位置
+        const nowActiveIndex = this.activeIndex
+        // 如果当前的指针不是0, 那么设置指针到当前时刻
+        if (nowActiveIndex !== 0) {
+          this.activeIndex = nowActiveIndex
+        } else {
+          let i = this.dateTimes.length - 1;
+          this.activeIndex = i;
+        }
       },
       // 将指针放在预警红色标识位置
       setActiveIndexRed() {
-        this.activeIndex = this.redIndex;
+        // 当前时刻的指针位置
+        const nowActiveIndex = this.activeIndex
+        // 如果当前的指针不是0, 那么设置指针到当前时刻
+        if (nowActiveIndex !== 0) {
+          this.activeIndex = nowActiveIndex
+        } else {
+          this.activeIndex = this.redIndex;
+        }
       },
-      // 将指针放在红色位置
+      // 刷新时间线
       refreshTimeLine() {
         // 如果是播放状态, 先停止播放, 记录下之前是播放着的
         let beforeIsPlay = false

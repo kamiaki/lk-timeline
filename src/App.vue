@@ -68,11 +68,12 @@
           }
         ]
         this.$refs.timeLine.refreshTimeLine()
-      }, 5000)
+      }, 2000)
       // 获取最近 2 天的日期
     },
     methods: {
       getmsg() {
+        this.$refs.timeLine.refreshTimeLine()
         // 主动获取 所有帧
         // console.info('getDayDateTimes')
         // console.info(this.$refs.timeLine.getDayDateTimes());

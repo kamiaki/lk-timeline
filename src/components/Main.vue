@@ -75,6 +75,7 @@
           speed: 1, // 当前速度速度
           speedMax: 5 // 速度最大值
         },
+        firstInit: true,// 是否第一次初始化
         intervalTimer: null, // 定时器 number
         playing: false, // 播放
         activeIndex: 0, // 当前的时间位置
@@ -184,11 +185,12 @@
         // 当前时刻的指针位置
         const nowActiveIndex = this.activeIndex
         // 如果当前的指针不是0, 那么设置指针到当前时刻
-        if (nowActiveIndex !== 0) {
+        if (!this.firstInit) {
           this.activeIndex = nowActiveIndex
         } else {
           let i = this.dateTimes.length - 1;
           this.activeIndex = i;
+          this.firstInit = false
         }
       },
       // 将指针放在预警红色标识位置
@@ -196,10 +198,11 @@
         // 当前时刻的指针位置
         const nowActiveIndex = this.activeIndex
         // 如果当前的指针不是0, 那么设置指针到当前时刻
-        if (nowActiveIndex !== 0) {
+        if (!this.firstInit) {
           this.activeIndex = nowActiveIndex
         } else {
           this.activeIndex = this.redIndex;
+          this.firstInit = false
         }
       },
       // 刷新时间线
